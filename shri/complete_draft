@@ -1,1 +1,61 @@
+import cv2  
+
+camera = cv2.VideoCapture(0)
+
+def detect_vehicles(frame):
+    #vehicle detection model here
+    num_vehicles = 1
+    relative_speed = 50  
+    relative_distance = 20  
+    relative_angle = 10  
+    return num_vehicles, relative_speed, relative_distance, relative_angle
+
+def gyroscope():
+   #data from gyroscope
+    inclination = 5  # Placeholder for degree
+    return inclination
+
+def detect_fog_or_rain():
+    # fog or rain detection
+    humidity, temperature = 70,32
+    return humidity > 80 #threshold
+
+def adjust_servo(angle):
+    angle=15
+    return angle
+    #adjusting servo rotating angle based on inclination
+
+def main():
+    try:
+        while True:
+            ret, frame = camera.read()
+            if not ret:
+                print("Failed to capture frame")
+                continue
+
+            num_vehicles, relative_speed, relative_distance, relative_angle = detect_vehicles(frame)
+            inclination = gyroscope()
+            fog_detected = detect_fog_or_rain()
+
+            if num_vehicles > 2:
+                print("Reducing intensity to low beam")
+                # Set LED to low intensity
+            else:
+                print("Adjusting beam pattern")
+                # Set LED to medium intensity and moving beam pattern
+            
+            if inclination > 10:
+                print("Adjusting beam due to inclination")
+                adjust_servo(30)  # Rotate servo for beam bending
+            
+            if fog_detected:
+                print("Fog detected: Increasing intensity and changing color temperature")
+                led = 1.0  #maximum intensity with options for temperaure/tone variation
+    except KeyboardInterrupt:
+        print("Exiting program")
+    finally:
+        camera.release()
+
+if __name__ == "__main__":
+    main()
 
